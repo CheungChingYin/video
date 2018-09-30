@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class RegistLoginController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/regist")
+    @PostMapping(value = "/regist")
     @ApiOperation(value = "用户注册", notes = "用户注册的接口")
     public JSONResult regist(@RequestBody Users user) throws Exception {
 
@@ -39,4 +40,25 @@ public class RegistLoginController {
         }
         return JSONResult.ok();
     }
+
+    @ApiOperation(value = "用户登录",notes = "用户登录接口")
+    @PostMapping("/login")
+    public JSONResult login(@RequestBody Users user) throws Exception{
+
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        if(StringUtils.isBlank(username) || StringUtils.isBlank(password)){
+            return JSONResult.ok("用户名不能为空");
+        }
+        Users userResult = userService.queryUserToLogin(username,MD5Utils.getMD5Str(password));
+        if(userResult != null){
+            userResult.setPassword("");
+            return JSONResult.ok(userResult);
+        }else {
+            return JSONResult.errorMsg("用户名或密码不正确，请重试!");
+        }
+    }
+
+
 }
