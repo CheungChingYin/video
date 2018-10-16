@@ -4,21 +4,6 @@ import java.security.MessageDigest;
 
 import org.apache.commons.codec.binary.Base64;
 
-/**
- * 
- * <p>
- * Title: MD5Utils
- * </p>
- * 
- * <p>
- * Description: 对密码进行MD5加密
- * </p>
- * 
- * @author JXPeng
- * 
- * @date 2018年9月17日
- * 
- */
 public class MD5Utils {
 
 	/**
@@ -32,7 +17,7 @@ public class MD5Utils {
 
 	public static void main(String[] args) {
 		try {
-			String md5 = getMD5Str("imooc");
+			String md5 = getMD5Str("svideos");
 			System.out.println(md5);
 		} catch (Exception e) {
 			e.printStackTrace();

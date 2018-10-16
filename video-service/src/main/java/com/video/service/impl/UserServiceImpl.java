@@ -57,4 +57,24 @@ public class UserServiceImpl implements UserService {
         Users result = usersMapper.selectOneByExample(userExample);
         return result;
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public void updateUserInfo(Users user) {
+
+        Example userExample = new Example(Users.class);
+        Example.Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("id", user.getId());
+        usersMapper.updateByExampleSelective(user, userExample);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users queryUserInfo(String userId) {
+        Example userExample = new Example(Users.class);
+        Example.Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("id", userId);
+        Users user = usersMapper.selectOneByExample(userExample);
+        return user;
+    }
 }

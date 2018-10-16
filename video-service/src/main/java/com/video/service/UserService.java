@@ -17,4 +17,8 @@ public interface UserService {
      * @return
      */
     public Users queryUserToLogin(String username,String password);
+
+    public void updateUserInfo(Users user);
+
+    public Users queryUserInfo(String userId);
 }
