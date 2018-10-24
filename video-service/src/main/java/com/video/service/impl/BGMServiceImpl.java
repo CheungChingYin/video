@@ -21,4 +21,11 @@ public class BGMServiceImpl implements BGMService {
     public List<Bgm> queryBGMList() {
         return bgmMapper.selectAll();
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Bgm queryBGMById(String bgmId) {
+
+        return bgmMapper.selectByPrimaryKey(bgmId);
+    }
 }

@@ -28,8 +28,8 @@ public class MergeVideoMp3 {
 		command.add(videoInputPath);
 
 		command.add("-t");
-		command.add(String.valueOf(seconds));
-
+//		command.add(String.valueOf(seconds));
+		command.add("8");
 		command.add("-y");
 		command.add(videoOutputPath);
 
