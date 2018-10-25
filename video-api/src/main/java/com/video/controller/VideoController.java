@@ -1,7 +1,10 @@
 package com.video.controller;
 
+import com.video.enums.VideoStatusEnum;
 import com.video.pojo.Bgm;
+import com.video.pojo.Videos;
 import com.video.service.BGMService;
+import com.video.service.VideoService;
 import com.video.utils.FetchVideoCover;
 import com.video.utils.JSONResult;
 import com.video.utils.MergeVideoMp3;
@@ -18,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.UUID;
 
 import static com.video.controller.BasicController.FFMPEG_EXE;
@@ -30,6 +34,9 @@ public class VideoController {
 
     @Autowired
     private BGMService bgmService;
+
+    @Autowired
+    private VideoService videoService;
 
 
     @ApiOperation(value = "上传视频", notes = "上传视频API")
@@ -116,10 +123,30 @@ public class VideoController {
             finalVideoPath = FILE_SPACE + uploadPathDB;
             tool.convertor(videoInputPath, mp3InputPath, videoSeconds, finalVideoPath);
         }
+
+        System.out.println("uploadPathDB" + uploadPathDB);
+        System.out.println("finalVideoPath"+finalVideoPath);
+
+        //对视频进行截图
         FetchVideoCover videoInfo = new FetchVideoCover(FFMPEG_EXE);
         videoInfo.getCover(finalVideoPath, FILE_SPACE + coverPathDB);
 
-        return JSONResult.ok();
+        //保存视频信息到数据库
+        Videos video = new Videos();
+        video.setAudioId(bGMId);
+        video.setUserId(userId);
+        video.setVideoSeconds((float) videoSeconds);
+        video.setVideoHeight(videoHeight);
+        video.setVideoWidth(videoWidth);
+        video.setVideoDesc(desc);
+        video.setVideoPath(uploadPathDB);
+        video.setCoverPath(coverPathDB);
+        video.setStatus(VideoStatusEnum.SUCCESS.value);
+        video.setCreateTime(new Date());
+
+        String videoId = videoService.saveVideo(video);
+
+        return JSONResult.ok(videoId);
 
     }
 }
