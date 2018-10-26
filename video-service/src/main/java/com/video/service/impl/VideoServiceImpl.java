@@ -28,4 +28,13 @@ public class VideoServiceImpl implements VideoService {
 
         return id;
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void updateVideoCover(String videoId, String videoCoverPath) {
+        Videos video = new Videos();
+        video.setId(videoId);
+        video.setCoverPath(videoCoverPath);
+        videosMapper.updateByPrimaryKeySelective(video);
+    }
 }
