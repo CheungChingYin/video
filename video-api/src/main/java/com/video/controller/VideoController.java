@@ -5,16 +5,14 @@ import com.video.pojo.Bgm;
 import com.video.pojo.Videos;
 import com.video.service.BGMService;
 import com.video.service.VideoService;
-import com.video.utils.FetchVideoCover;
-import com.video.utils.JSONResult;
-import com.video.utils.MergeVideoMp3;
-import com.video.utils.SVideosJSONResult;
+import com.video.utils.*;
 import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +23,7 @@ import java.util.UUID;
 
 import static com.video.controller.BasicController.FFMPEG_EXE;
 import static com.video.controller.BasicController.FILE_SPACE;
+import static com.video.controller.BasicController.PAGE_SIZE;
 
 @RestController
 @Api(value = "视频业务处理", tags = {"视频业务处理控制器API"})
@@ -152,7 +151,7 @@ public class VideoController {
     @ApiOperation(value = "上传封面", notes = "上传封面的接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "form"),
-            @ApiImplicitParam(name = "videoId", value = "视频主键id", required = true, dataType = "String", paramType = "form") })
+            @ApiImplicitParam(name = "videoId", value = "视频主键id", required = true, dataType = "String", paramType = "form")})
     @PostMapping(value = "/uploadCover", headers = "content-type=multipart/form-data")
     public JSONResult uploadCover(String userId, String videoId, @ApiParam(value = "视频封面", required = true) MultipartFile file) throws IOException {
 
@@ -203,5 +202,30 @@ public class VideoController {
         videoService.updateVideoCover(videoId, uploadPathDB);
 
         return JSONResult.ok();
+    }
+
+    /**
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws Exception
+     * @Description: 分页和搜索查询视频列表 isSaveRecord：1 - 需要保存 0 - 不需要保存 ，或者为空的时候
+     */
+    @ApiOperation(value = "获取视频列表", notes = "获取视频列表API")
+    @ApiImplicitParam(name = "page", value = "第几页", required = false, dataType = "String", paramType = "query")
+    @PostMapping(value = "/showAll")
+    public JSONResult showAll(Integer page, Integer pageSize)
+            throws Exception {
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        PagedResult result = videoService.getAllVideos(page, pageSize);
+        return JSONResult.ok(result);
     }
 }

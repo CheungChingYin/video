@@ -17,4 +17,6 @@ public class BasicController {
     // ffmpeg所在目录
     public static final String FFMPEG_EXE = "f:\\soft\\ffmpeg\\bin\\ffmpeg.exe";
 
+    public static final Integer PAGE_SIZE = 5;
+
 }

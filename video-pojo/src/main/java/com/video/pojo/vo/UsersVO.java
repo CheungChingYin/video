@@ -1,4 +1,4 @@
-package com.video.pojo.com.video.pojo.vo;
+package com.video.pojo.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;

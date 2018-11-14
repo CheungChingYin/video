@@ -21,4 +21,6 @@ public interface UserService {
     public void updateUserInfo(Users user);
 
     public Users queryUserInfo(String userId);
+
+    public void updateUserNickName(String id ,String nickName);
 }

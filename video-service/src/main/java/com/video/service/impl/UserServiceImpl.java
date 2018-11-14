@@ -77,4 +77,12 @@ public class UserServiceImpl implements UserService {
         Users user = usersMapper.selectOneByExample(userExample);
         return user;
     }
+
+    @Override
+    public void updateUserNickName(String id, String nickName) {
+        Users users = new Users();
+        users.setId(id);
+        users.setNickname(nickName);
+        usersMapper.updateByPrimaryKeySelective(users);
+    }
 }

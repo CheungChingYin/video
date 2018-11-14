@@ -1,22 +1,18 @@
 package com.video.controller;
 
 import com.video.pojo.Users;
-import com.video.pojo.com.video.pojo.vo.UsersVO;
+import com.video.pojo.vo.UsersVO;
 import com.video.service.UserService;
 import com.video.utils.JSONResult;
-import com.video.utils.SVideosJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -24,7 +20,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 @RestController
-@Api(value = "用户相关业务的接口", tags = { "用户相关业务的controller" })
+@Api(value = "用户相关业务的接口", tags = {"用户相关业务的controller"})
 @RequestMapping("/user")
 public class UserController extends BasicController {
 
@@ -34,9 +30,9 @@ public class UserController extends BasicController {
     @ApiOperation(value = "用户上传头像", notes = "用户上传头像的接口")
     @ApiImplicitParam(name = "userId", value = "用户Id", required = true, dataType = "String", paramType = "query")
     @PostMapping("/uploadFace")
-    public JSONResult uploadFace(String userId,@RequestParam("file") MultipartFile[] files) throws Exception{
+    public JSONResult uploadFace(String userId, @RequestParam("file") MultipartFile[] files) throws Exception {
 
-        if(StringUtils.isBlank(userId)){
+        if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户Id不能为空");
         }
         // 文件保存的命名空间
@@ -64,7 +60,7 @@ public class UserController extends BasicController {
                     fileOutputStream = new FileOutputStream(outFile);
                     inputStream = files[0].getInputStream();
                     IOUtils.copy(inputStream, fileOutputStream);
-                }else {
+                } else {
                     return JSONResult.errorMsg("上传出错...");
                 }
             }
@@ -101,6 +97,24 @@ public class UserController extends BasicController {
         BeanUtils.copyProperties(userInfo, userVO);
 
         return JSONResult.ok(userVO);
+    }
+
+
+    @ApiOperation(value = "修改用户昵称", notes = "修改用户昵称的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户Id", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "nickName", value = "用户昵称", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/changeUserNickName")
+    public JSONResult changeUserNickName(String userId,String nickName) {
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("用户ID不能为空");
+        }
+        if (StringUtils.isBlank(nickName)) {
+            return JSONResult.errorMsg("用户昵称不能为空");
+        }
+        userService.updateUserNickName(userId, nickName);
+        return JSONResult.ok();
     }
 
 

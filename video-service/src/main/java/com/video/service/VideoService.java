@@ -1,10 +1,18 @@
 package com.video.service;
 
 import com.video.pojo.Videos;
+import com.video.pojo.vo.VideosVO;
+import com.video.utils.PagedResult;
+
+import java.util.List;
 
 public interface VideoService {
 
-    public String saveVideo(Videos video);
+    String saveVideo(Videos video);
 
-    public void updateVideoCover(String videoId, String videoCoverPath);
+    void updateVideoCover(String videoId, String videoCoverPath);
+
+    PagedResult getAllVideos(Integer page,Integer pageSize);
+
+
 }

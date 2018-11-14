@@ -1,7 +1,7 @@
 package com.video.controller;
 
 import com.video.pojo.Users;
-import com.video.pojo.com.video.pojo.vo.UsersVO;
+import com.video.pojo.vo.UsersVO;
 import com.video.service.UserService;
 import com.video.utils.JSONResult;
 import com.video.utils.MD5Utils;
